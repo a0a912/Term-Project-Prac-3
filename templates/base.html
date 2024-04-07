@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+    <h1> I made this header in base.html</h1>
+        <nav>
+             <!-- <a href="/">Home</a>-->
+            <a href="{{ url_for('html.home') }}">Homepage</a>
+            <!-- <a href="/customers">Customers</a> -->
+            <a href="{{ url_for('html.customers') }}">Customers</a>
+            <!-- <a href="/products">Products</a> -->
+            <a href="{{ url_for('html.products') }}">Products</a>
+            <!-- <a href="/orders">Orders</a> -->
+            <a href="{{ url_for('html.orders') }}">Orders</a>
+
+        </nav>
+
+        {% block content %}
+          <h1> This is that weird base.html file </h1>
+        {% endblock %}
+
+    </body>
+</html>

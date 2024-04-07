@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Customers</h1>
+{% for customer in customers %}
+<p>
+    <span> Name: {{ customer.name }}</span> <br>
+    <span>Id: {{ customer.id }}</span> <br>
+    <span>Phone: {{ customer.phone }}</span> <br>
+    <span>Balance: {{ customer.balance }}</span> <br> <hr>
+
+</p>
+
+
+{% endfor %}
+{% endblock %}
