@@ -6,10 +6,21 @@ FLASK_URL = "http://localhost:8888"
 
 
 def http(method, path, data=None):
+    """
+    A function to make an HTTP request using the specified method and path.
+
+    Parameters:
+        method (str): The HTTP method to use (GET, POST, PUT, DELETE).
+        path (str): The path to make the request to.
+        data (dict, optional): The data to send in the request body for POST and PUT methods.
+
+    Returns:
+        requests.Response: The response object from the HTTP request.
+    """
     print(f"Making {method} request to {FLASK_URL + path}...")
     if method not in ["GET", "POST", "PUT", "DELETE"]:
         raise RuntimeWarning("Invalid method")
-    
+
     if method == "GET":
         response = requests.get(FLASK_URL + path)
     elif method == "POST":
@@ -19,7 +30,7 @@ def http(method, path, data=None):
     elif method == "DELETE":
         response = requests.delete(FLASK_URL + path)
 
-    
+
     print("Received status code:", response.status_code)
     print("Response data:", response.text)  # Print response data
     return response
@@ -41,6 +52,15 @@ def delete(path):
 
 
 def update_customer_balance(order_id):
+    """
+    A function to update a customer's balance to $1000 based on the order ID.
+
+    Args:
+        order_id (int): The ID of the order to retrieve and update the customer's balance.
+
+    Returns:
+        None
+    """
     # Get the order details
     response = get(f"/api/orders/{order_id}")
     orders = response.json()

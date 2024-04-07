@@ -14,6 +14,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{app.instance_path}/store.db
 # Need to read the CSV and feed the data into the database
 
 # CSV Reader function
+"""
+Reads a CSV file and stores its contents in a list. 
+
+:param filename: The name of the CSV file to read.
+:return: A list containing the data read from the CSV file.
+"""
 def read_csv(filename):
 	temp = []
 	with open(filename, 'r') as file:
@@ -22,8 +28,18 @@ def read_csv(filename):
 			temp.append(row)
 		return temp
 
+# Function to create random orders
 
 def create_random_orders(num_orders=5):
+	"""
+	Function to create random orders in the database.
+
+	Parameters:
+		num_orders (int): Number of random orders to create. Defaults to 5.
+
+	Returns:
+		None
+	"""
 	for ii in range(num_orders):
 		# Randomly select one customer
 		customer = db.session.query(Customer).order_by(func.random()).first()
@@ -53,6 +69,13 @@ def create_random_orders(num_orders=5):
 
 
 def set_product_availability(min_quantity=0, max_quantity=100):
+	"""
+	Set the availability of products within a given quantity range.
+
+	:param min_quantity: the minimum quantity for availability (default is 0)
+	:param max_quantity: the maximum quantity for availability (default is 100)
+	:return: None
+	"""
 	products = Product.query.all()
 	for product in products:
 		product.available = random.randint(min_quantity, max_quantity)

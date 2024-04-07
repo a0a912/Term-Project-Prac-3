@@ -47,6 +47,7 @@ def order_detail(order_id):
 
 @html_bp.route("/orders/<int:order_id>/delete", methods=["POST"])
 def order_delete_web(order_id):
+	# Need this to avoid a bug from having 2 similar routes for some reason
 
 	order = db.get_or_404(Order, order_id)
 
@@ -63,6 +64,7 @@ def order_delete_web(order_id):
 
 @html_bp.route("/orders/<int:order_id>/process", methods=["POST"])
 def order_process_web(order_id):
+	#Need this to avoid a bug from having 2 similar routes for some reason
 	# Retrieve the order from the database
 	order = Order.query.get_or_404(order_id)
 
