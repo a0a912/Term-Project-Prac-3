@@ -4,7 +4,8 @@
 <h1>Order Detail</h1>
 
 <p>Order ID: {{ order.id }}</p>
-<p>Customer: <a href="/customer/{{ order.customer_id }}">{{ order.customer.name }}</a></p>
+<p>Customer Name: {{ order.customer.name }}</p>
+<p>Customer Id: {{ order.customer.id }}</p>
 <p>Created: {{ order.created }}</p>
 <p>Processed: {{ order.processed }}</p>
 <p>Total: {{ order.total }}</p>

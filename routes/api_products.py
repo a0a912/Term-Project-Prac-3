@@ -38,6 +38,8 @@ def product_create():
 	data = request.get_json()
 	if 'name' not in data or 'price' not in data:
 		return "Invalid request", 400
+	if data['price'] <= 0:
+		return "Price must be a positive float.", 400
 	new_product = Product(**data)
 	db.session.add(new_product)
 	db.session.commit()
