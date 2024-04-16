@@ -1,7 +1,7 @@
 from flask import Flask
 from db import db
 from app import app
-from models import Customer, Product, Order, ProductOrder
+from models import Customer, Product, Order, ProductOrder, Category
 from pathlib import Path
 import csv
 import random
@@ -88,11 +88,21 @@ if __name__ == '__main__':
 		db.create_all()
 		customers = read_csv('data/customers.csv')
 		products = read_csv('data/products.csv')
+		categories = read_csv('data/products.csv')
+		#There are duplicate categories. Gotta find a way to remove them before I add them to the database :(
+		#Try this approach: res = list(set(val for dic in test_list for val in dic.values()))
+		unique_categories = list({category['category'] for category in categories})
+
 		# Wait. I can cheese this with kwargs!!!!!!!!!!!
 		for customer in customers:
 			db.session.add(Customer(**customer))
 		for product in products:
 			db.session.add(Product(**product))
+
+		for category in unique_categories:
+			db.session.add(Category(name=category))
+			#db.session.add(Category(name=category['category']))
+
 		set_product_availability()
 		create_random_orders(10)
 		db.session.commit()

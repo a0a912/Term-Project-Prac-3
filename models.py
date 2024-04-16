@@ -21,19 +21,21 @@ class Customer(db.Model):
 			"balance": self.balance
 		}
 
-
+#Need to add a new colum: category
 # Product Class
 class Product(db.Model):
 	id = mapped_column(Integer, primary_key=True)
 	name = mapped_column(String(200), nullable=False, unique=True)
 	price = mapped_column(DECIMAL(18, 2), nullable=False)
 	available = mapped_column(Integer, nullable=False, default=0)
+	category = mapped_column(String(200), nullable=False, unique=False)
+
 
 	def to_json(self):
 		return {
 			"id": self.id,
 			"name": self.name,
-			"price": self.price,
+			"price": str(self.price),
 			"available": self.available,
 		}
 
@@ -131,4 +133,22 @@ class ProductOrder(db.Model):
 			"order_id": self.order_id,
 			"product_id": self.product_id,
 			"quantity": self.quantity,
+		}
+
+'''
+Need to add a new model
+Make sure that a Category has the following:
+a name (for example: fruits) - category names are unique a description
+the description is NOT provided in the CSV file it can be any string its default value should be N/A
+'''
+class Category(db.Model):
+	id = mapped_column(Integer, primary_key=True)
+	name = mapped_column(String(200), nullable=False, unique=True)
+	description = mapped_column(String(200), nullable=False, default="N/A")
+
+	def to_json(self):
+		return {
+			"id": self.id,
+			"name": self.name,
+			"description": self.description
 		}

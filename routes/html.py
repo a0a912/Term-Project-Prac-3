@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, jsonify
 from db import db
-from models import Customer, Product, Order
+from models import Customer, Product, Order, Category
 
 html_bp = Blueprint("html", __name__)
 
@@ -84,3 +84,80 @@ def order_process_web(order_id):
 
     # Redirect back to the order detail page after processing
     return redirect(url_for('order_detail', order_id=order_id))
+
+#Final exam additions
+
+'''
+Find customers with 0 or negative balance
+Create the following route: /final/customers-warning . This route responds to GET requests, and returns JSON data with a list of all customers that have 0 or a negative balance. The list contains dictionaries, and each dictionary includes the customer name, balance, and the link to the API route for the customer JSON detail view (see term project, part 2, top of page 2) - use url_for .
+'''
+@html_bp.route("/final/customers-warning")
+def customers_warning():
+    #Get list of all customers with 0 or negative balance
+    customers_with_low_balance = Customer.query.filter(Customer.balance <= 0).all()
+
+    #Create list of dictionaries for each customer
+    customers = []
+    for customer in customers_with_low_balance:
+        customers.append({
+            "name": customer.name,
+            "balance": customer.balance,
+            "url": url_for("api_customers.customers_detail_json", id=customer.id)
+        })
+    #Return list as JSON
+    return jsonify(customers)
+
+'''
+Find products that are out of stock
+Create the following route: /final/out-of-stock. This route responds to GET requests, and returns a JSON list of all product names that are out of stock (= items with available quantity equal to 0). For example, if lemon and chicken are out of stock, the endpoint will return:
+[
+    "Lemon",
+    "Chicken"
+]
+'''
+
+@html_bp.route("/final/out-of-stock")
+def out_of_stock():
+    #Get list of all products with 0 availability
+    products_out_of_stock = Product.query.filter(Product.available == 0).all()
+    #Create list of each product so I can use it in the JSON
+    products = []
+    for product in products_out_of_stock:
+        products.append({
+            "name": product.name
+        })
+    #Return list as JSON
+    return jsonify(products)
+
+'''
+List of categories (JSON)
+Make up a URL of your choice that will be used to display the list of categories. This route must return a JSON list of dictionaries. Each dictionary contains:
+name: the name of the category description: the description of the category products: a list of dictionaries with information for each product that belong to the category: name: the name of the product url: the link to the product page (term project). The link may just be the URL path, without the hostname (use url_for ).
+
+'''
+@html_bp.route("/final/categories")
+def categories():
+    # Get list of all categories names
+    categories_names = db.session.query(Category).all()
+
+    # Create list of dictionaries for each category
+    categories = []
+    for category in categories_names:
+        # Need to get a list of all products in the category
+        products_in_category = Product.query.filter_by(category=category.name).all()
+        # Create list of dictionaries for each product
+        json_products = []
+        for product in products_in_category:
+            json_products.append({
+                "name": product.name,
+                "url": url_for("html.products")
+            })
+
+        categories.append({
+            "name": category.name,
+            "description": category.description,
+            "products": json_products
+        })
+
+    # Return list as JSON
+    return jsonify(categories)
